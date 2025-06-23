@@ -1,0 +1,12 @@
+Libro
+Capitulo
+Sentencia
+Palabra
+Lista
+Seccion
+Tabla
+Figura
+Problema1_Libro
+Vineta
+Parrafo
+Componente
