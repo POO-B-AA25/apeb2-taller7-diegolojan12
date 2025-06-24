@@ -143,7 +143,6 @@ class CuentaBancaria {
     public String numeroCuenta;
     public String nombreCliente;
     public double balance;
-    public double dinero;
     public double interes;
 
     public CuentaBancaria() {
