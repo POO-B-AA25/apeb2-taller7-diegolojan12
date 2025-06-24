@@ -122,8 +122,6 @@ class MensajeTexto extends Mensaje {
 class MensajeImagen extends Mensaje {
     public String nombreFichero;
 
-    
-
     public MensajeImagen(String nombreFichero, int numRemitente, int numDestinatario, String nombreRem, String nombreDes) {
         super(numRemitente, numDestinatario, nombreRem, nombreDes);
         this.nombreFichero = nombreFichero;

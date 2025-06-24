@@ -25,15 +25,18 @@ public class Problema5_Teatro {
             for (int i = 0; i < zonas.size(); i++) {
                 System.out.println((i + 1) + ". " + zonas.get(i).nombre);
             }
-            System.out.print("Opción: ");
-            int opcionZona = sc.nextInt();
-            sc.nextLine(); 
-            System.out.println();
-
-            if (opcionZona < 1 || opcionZona > zonas.size()) {
+            
+            int opcionZona;
+            do {
+                System.out.print("Opción: ");
+                opcionZona = sc.nextInt();
+                sc.nextLine(); 
+                System.out.println();
+                if (opcionZona < 1 || opcionZona > zonas.size()) {
                 System.out.println("Zona inválida.");
-            }
-
+                }
+            } while (opcionZona > 4 || opcionZona < 0);
+            
             Zona zonaSeleccionada = zonas.get(opcionZona - 1);
             System.out.println(zonaSeleccionada);
             if (!zonaSeleccionada.hayDisponibilidad()) {
@@ -92,7 +95,8 @@ public class Problema5_Teatro {
                 boolean encontrada = false;
                 for (Entrada e : entradasVendidas) {
                     if (e.id == idBuscar) {
-                        System.out.println(e);
+                        System.out.println("Encontada: " + e);
+                        encontrada = true;
                         break;
                     }
                 }

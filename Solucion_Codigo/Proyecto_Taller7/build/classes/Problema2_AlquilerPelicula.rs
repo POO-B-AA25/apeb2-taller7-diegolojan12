@@ -1,5 +1,0 @@
-VHS
-DVD
-SoportePelicla
-Pelicula
-Problema2_AlquilerPelicula

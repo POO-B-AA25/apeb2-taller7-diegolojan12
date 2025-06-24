@@ -24,8 +24,7 @@ public class Problema2_AlquilerPelicula {
             System.out.println("\n--- Menú Principal ---");
             System.out.println("1. Añadir nueva película");
             System.out.println("2. Mostrar todas las películas");
-            System.out.println("3. Mostrar todos los soportes");
-            System.out.println("4. Salir");
+            System.out.println("3. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = sc.next().charAt(0);
             sc.nextLine(); 
@@ -54,6 +53,7 @@ public class Problema2_AlquilerPelicula {
                         double precio = 5 + random.nextDouble() * 10; 
                         
                         VHS vhs = new VHS(idioma, nuevaPelicula, precio);
+                        
                         System.out.println("\nVHS creado: " + vhs);
                     } else if(tipoSoporte == 2) {
                         String[] idiomasDVD = {"Español", "Inglés", "Francés", "Alemán", "Italiano"};
@@ -65,18 +65,21 @@ public class Problema2_AlquilerPelicula {
                         
                         ArrayList<Pelicula> peliculasDVD = new ArrayList<>();
                         peliculasDVD.add(nuevaPelicula);
-                        
-                        if(listaPeliculas.size() > 1) {
-                            int extras = random.nextInt(2) + 1; 
-                            for(int i = 0; i < extras && i < listaPeliculas.size() - 1; i++) {
-                                peliculasDVD.add(listaPeliculas.get(random.nextInt(listaPeliculas.size() - 1)));
-                            }
+                        System.out.println("Dese añadir otra pelicula al DVD? (S/N): ");
+                        char anadirPelicula = sc.next().charAt(0);
+                        if (anadirPelicula == 'S') {
+                            String titulon = titulos[random.nextInt(titulos.length)];
+                            String directorn = directores[random.nextInt(directores.length)];
+                            int añon = 1970 + random.nextInt(50);
+                            Pelicula nuevaPeliculan = new Pelicula(titulon, directorn, añon);
+                            peliculasDVD.add(nuevaPeliculan);
                         }
-                        
-                        double precio = 10 + random.nextDouble() * 15;
-                        DVD dvd = new DVD(idiomas, peliculasDVD, precio);
+
+                        double precio = 10 + random.nextDouble() * 15;   
+                        DVD dvd = new DVD(idiomas, peliculasDVD, precio);  
                         dvd.calcularCostoAlquiler();
                         System.out.println("\nDVD creado: " + dvd);
+                        
                     } else {
                         System.out.println("Opción no válida. No se creó soporte.");
                     }
@@ -88,7 +91,7 @@ public class Problema2_AlquilerPelicula {
                         System.out.println(p);
                     }
                     break;                   
-                case '4':
+                case '3':
                     System.out.println("Saliendo del programa...");
                     break;
                     
@@ -96,7 +99,7 @@ public class Problema2_AlquilerPelicula {
                     System.out.println("Opción no válida. Intente nuevamente.");
             }
             
-        } while(opcion != '4');
+        } while(opcion != '3');
     }
 }
    

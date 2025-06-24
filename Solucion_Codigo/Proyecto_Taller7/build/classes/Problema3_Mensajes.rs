@@ -1,4 +1,0 @@
-Mensaje
-MensajeImagen
-MensajeTexto
-Problema3_Mensajes

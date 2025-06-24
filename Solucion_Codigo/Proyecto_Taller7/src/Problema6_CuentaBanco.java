@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -16,7 +17,7 @@ public class Problema6_CuentaBanco {
         String continuar;
 
         do {
-            // Generar datos aleatorios para la cuenta
+
             String numeroCuenta = "C" + (10000000 + random.nextInt(90000000));
             String nombreCliente = nombres[random.nextInt(nombres.length)];
             double balanceInicial = 500 + random.nextDouble() * 9500;
@@ -27,23 +28,22 @@ public class Problema6_CuentaBanco {
             System.out.println("3. Cuenta Platino");
             System.out.print("Opción: ");
             int tipoCuenta = sc.nextInt();
-            sc.nextLine(); // limpiar buffer
+            sc.nextLine();
 
             switch (tipoCuenta) {
                 case 1 -> {
-                    double tasaInteres = 0.02 + random.nextDouble() * 0.08; // 2% - 10%
+                    double tasaInteres = 0.02 + random.nextDouble() * 0.08;
                     CuentaAhorro ca = new CuentaAhorro(tasaInteres, numeroCuenta, nombreCliente, balanceInicial);
                     listaCuentas.add(ca);
                     System.out.println("\nCuenta de Ahorro creada: " + ca);
                 }
                 case 2 -> {
-                    boolean sobregiro = random.nextBoolean();
-                    CuentaCheque cc = new CuentaCheque(sobregiro, numeroCuenta, nombreCliente, balanceInicial);
+                    CuentaCheque cc = new CuentaCheque(numeroCuenta, nombreCliente, balanceInicial);
                     listaCuentas.add(cc);
                     System.out.println("\nCuenta de Cheque creada: " + cc);
                 }
                 case 3 -> {
-                    double tasaInteres = 0.05 + random.nextDouble() * 0.10; // 5% - 15%
+                    double tasaInteres =  0.10;
                     CuentaPlatino cp = new CuentaPlatino(tasaInteres, numeroCuenta, nombreCliente, balanceInicial);
                     listaCuentas.add(cp);
                     System.out.println("\nCuenta Platino creada: " + cp);
@@ -52,54 +52,84 @@ public class Problema6_CuentaBanco {
                     System.out.println("Opción no válida.");
             }
 
-            // Operaciones con la cuenta recién creada
             if (!listaCuentas.isEmpty()) {
                 CuentaBancaria cuentaActual = listaCuentas.get(listaCuentas.size() - 1);
-                
+
                 System.out.println("\n¿Desea realizar operaciones con esta cuenta? (S/N)");
                 String operar = sc.nextLine().toUpperCase();
-                
+
                 while (operar.equals("S")) {
                     System.out.println("\nOperaciones disponibles:");
                     System.out.println("1. Depositar");
                     System.out.println("2. Retirar");
-                    System.out.println("3. Mostrar información");
+                    System.out.println("3. Obtener valance actual");
                     System.out.print("Opción: ");
                     int opcion = sc.nextInt();
-                    sc.nextLine(); // limpiar buffer
-                    
+                    sc.nextLine();
+
                     switch (opcion) {
                         case 1 -> {
                             System.out.print("Ingrese monto a depositar: ");
-                            double montoDeposito = sc.nextDouble();
-                            sc.nextLine();
+                            double montoDeposito;
+                            do {
+                                montoDeposito = sc.nextDouble();
+                                sc.nextLine();
+                                if (montoDeposito <= 0) {
+                                    System.out.println("Cantidad invalida.");
+                                }
+                            } while (montoDeposito <= 0);
                             cuentaActual.depositar(montoDeposito);
+
                             System.out.println("Depósito realizado. Nuevo balance: " + cuentaActual.balance);
                         }
                         case 2 -> {
                             System.out.print("Ingrese monto a retirar: ");
-                            double montoRetiro = sc.nextDouble();
-                            sc.nextLine();
+                            double montoRetiro;
+                            do {
+                                montoRetiro = sc.nextDouble();
+                                sc.nextLine();
+                                if (cuentaActual instanceof CuentaAhorro && montoRetiro > cuentaActual.balance) {
+                                    System.out.println("Cantidad invalida.");
+                                    System.out.print("Vuelva a ingresar: ");
+                                }
+                            } while (cuentaActual instanceof CuentaAhorro && montoRetiro > cuentaActual.balance);
+                            
                             cuentaActual.retirar(montoRetiro);
+                            
+                            if (cuentaActual instanceof CuentaCheque) {
+                                ((CuentaCheque) cuentaActual).revisarSobregiro();
+                            } else if (cuentaActual instanceof CuentaPlatino) {
+                                ((CuentaPlatino) cuentaActual).revisarSobregiro();
+                            }
+                            
                             System.out.println("Retiro realizado. Nuevo balance: " + cuentaActual.balance);
                         }
                         case 3 -> {
-                            System.out.println(cuentaActual.toString());
+                            System.out.println(cuentaActual.getBalance());
                         }
-                        default -> System.out.println("Opción no válida.");
+                        default ->
+                            System.out.println("Opción no válida.");
                     }
-                    
+
                     System.out.println("\n¿Desea realizar otra operación con esta cuenta? (S/N)");
                     operar = sc.nextLine().toUpperCase();
+                }
+
+                if (cuentaActual instanceof CuentaAhorro) {
+                    ((CuentaAhorro) cuentaActual).calcularInteres();
+                    System.out.println("Interés calculado y agregado: $" + cuentaActual.interes);
+                } else if (cuentaActual instanceof CuentaPlatino) {
+                    ((CuentaPlatino) cuentaActual).calcularInteres();
+                    System.out.println("Interés calculado y agregado: $" + cuentaActual.interes);
                 }
             }
 
             System.out.println("\n¿Desea crear otra cuenta? (S/N)");
-            continuar = sc.nextLine().toUpperCase();
+            continuar = sc.nextLine();
 
         } while (continuar.equals("S"));
 
-        System.out.println("\n--- Lista Final de Cuentas ---");
+        System.out.println("\nLista Final de Cuentas");
         for (CuentaBancaria cuenta : listaCuentas) {
             System.out.println(cuenta);
         }
@@ -109,9 +139,12 @@ public class Problema6_CuentaBanco {
 }
 
 class CuentaBancaria {
+
     public String numeroCuenta;
     public String nombreCliente;
     public double balance;
+    public double dinero;
+    public double interes;
 
     public CuentaBancaria() {
     }
@@ -123,19 +156,15 @@ class CuentaBancaria {
     }
 
     public void depositar(double monto) {
-        if (monto > 0) {
-            balance += monto;
-        } else {
-            System.out.println("Monto inválido para depósito.");
-        }
+        this.balance += monto;
     }
 
     public void retirar(double monto) {
-        if (monto > 0 && balance >= monto) {
-            balance -= monto;
-        } else {
-            System.out.println("Monto inválido o saldo insuficiente para retiro.");
-        }
+        this.balance -= monto;
+    }
+
+    public double getBalance() {
+        return this.balance;
     }
 
     @Override
@@ -144,43 +173,8 @@ class CuentaBancaria {
     }
 }
 
-class CuentaCheque extends CuentaBancaria {
-    public boolean sobregiro;
-
-    public CuentaCheque() {
-    }
-
-    public CuentaCheque(boolean sobregiro, String numeroCuenta, String nombreCliente, double balance) {
-        super(numeroCuenta, nombreCliente, balance);
-        this.sobregiro = sobregiro;
-    }
-
-    public void revisarSobregiro() {
-        if (balance < 0) {
-            sobregiro = true;
-            System.out.println("Cuenta en sobregiro!");
-        } else {
-            sobregiro = false;
-        }
-    }
-
-    @Override
-    public void retirar(double monto) {
-        if (monto > 0) {
-            balance -= monto;
-            revisarSobregiro();
-        } else {
-            System.out.println("Monto inválido para retiro.");
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "CuentaCheque{sobregiro=" + sobregiro + "} " + super.toString();
-    }
-}
-
 class CuentaAhorro extends CuentaBancaria {
+
     public double tasaInteres;
 
     public CuentaAhorro() {
@@ -192,9 +186,9 @@ class CuentaAhorro extends CuentaBancaria {
     }
 
     public void calcularInteres() {
-        double interes = balance * tasaInteres;
+        super.interes = balance * tasaInteres;
         balance += interes;
-        System.out.println("Interés calculado y agregado: " + interes);
+
     }
 
     @Override
@@ -203,8 +197,32 @@ class CuentaAhorro extends CuentaBancaria {
     }
 }
 
+class CuentaCheque extends CuentaBancaria {
+
+    public boolean sobregiro;
+
+    public CuentaCheque() {
+    }
+
+    public CuentaCheque(String numeroCuenta, String nombreCliente, double balance) {
+        super(numeroCuenta, nombreCliente, balance);
+
+    }
+
+    public void revisarSobregiro() {
+        this.sobregiro = this.balance < 0;
+    }
+
+    @Override
+    public String toString() {
+        return "CuentaCheque{sobregiro=" + sobregiro + "} " + super.toString();
+    }
+}
+
 class CuentaPlatino extends CuentaBancaria {
+
     public double tasaInteres;
+    public boolean sobregiro;
 
     public CuentaPlatino() {
     }
@@ -212,16 +230,20 @@ class CuentaPlatino extends CuentaBancaria {
     public CuentaPlatino(double tasaInteres, String numeroCuenta, String nombreCliente, double balance) {
         super(numeroCuenta, nombreCliente, balance);
         this.tasaInteres = tasaInteres;
+        
     }
 
-    @Override
-    public void depositar(double monto) {
-        // Cuenta platino recibe bonificación del 1% en depósitos
-        super.depositar(monto * 1.01);
+    public void calcularInteres() {
+        super.interes = balance * tasaInteres;
+        this.balance += this.interes;
+    }
+
+    public void revisarSobregiro() {
+        this.sobregiro = this.balance < 0;
     }
 
     @Override
     public String toString() {
-        return "CuentaPlatino{tasaInteres=" + tasaInteres + "} " + super.toString();
+        return "CuentaPlatino{tasaInteres=" + tasaInteres + "sobregiro" + sobregiro + "} " + super.toString();
     }
 }

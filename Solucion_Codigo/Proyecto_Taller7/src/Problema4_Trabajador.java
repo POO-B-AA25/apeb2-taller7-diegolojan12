@@ -21,7 +21,7 @@ public class Problema4_Trabajador {
         String continuarJefes;
 
         do {
-            // CREAR UN NUEVO JEFE
+            
             String nombrej = nombres[random.nextInt(nombres.length)];
             String apellidoj = apellidos[random.nextInt(apellidos.length)] + " " + apellidos[random.nextInt(apellidos.length)];
             String direccionj = direcciones[random.nextInt(direcciones.length)];
@@ -51,7 +51,7 @@ public class Problema4_Trabajador {
                     System.out.println("3. Trabajador por Horas");
                     System.out.print("Opción: ");
                     int tipoTrabajador = sc.nextInt();
-                    sc.nextLine(); // limpiar buffer
+                    sc.nextLine(); 
 
                     switch (tipoTrabajador) {
                         case 1 -> {
@@ -89,12 +89,12 @@ public class Problema4_Trabajador {
 
         } while (continuarJefes.equals("S"));
 
-        System.out.println("\n--- Lista Final de Trabajadores ---");
+        System.out.println("\nLista Final de Trabajadores");
         for (Trabajador t : listaTrabajadores) {
             System.out.println(t);
         }
 
-        System.out.println("\n--- Lista Final de Jefes ---");
+        System.out.println("\nLista Final de Jefes");
         for (Jefe j : listaJefes) {
             System.out.println(j);
         }
