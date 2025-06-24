@@ -145,8 +145,7 @@ class CuentaBancaria {
     public double balance;
     public double interes;
 
-    public CuentaBancaria() {
-    }
+    public CuentaBancaria() {}
 
     public CuentaBancaria(String numeroCuenta, String nombreCliente, double balance) {
         this.numeroCuenta = numeroCuenta;
