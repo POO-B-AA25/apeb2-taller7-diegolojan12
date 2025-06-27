@@ -13,7 +13,7 @@ public class Problema3_Mensajes {
         String[] mensajesTexto = {"Hola, ¿cómo estás?", "Te llamo más tarde", "Nos vemos a las 8", 
                                  "Feliz cumpleaños!", "Confirmado el meeting", "LLegaré tarde"};
         String[] imagenes = {"foto1.jpg", "vacaciones.png", "memes.gif", "documento.pdf", "captura.png"};
-        
+        Movil miMovil = new Movil();
         ArrayList<Mensaje> listaMensajes = new ArrayList<>();
         
         char opcion;
@@ -29,7 +29,6 @@ public class Problema3_Mensajes {
             
             switch(opcion) {
                 case '1':
-                    // Generar datos aleatorios para el SMS
                     int numRemSMS = 600000000 + random.nextInt(100000000);
                     int numDesSMS = 600000000 + random.nextInt(100000000);
                     String nombreRemSMS = nombres[random.nextInt(nombres.length)];
@@ -38,27 +37,25 @@ public class Problema3_Mensajes {
                     
                     MensajeTexto sms = new MensajeTexto(texto, numRemSMS, numDesSMS, nombreRemSMS, nombreDesSMS);
                     listaMensajes.add(sms);
+                    miMovil.agregarMensaje(sms);
                     System.out.println("\nMensaje de texto enviado: " + sms);
                     break;
                     
                 case '2':
-                    // Generar datos aleatorios para el MMS
                     int numRemMMS = 600000000 + random.nextInt(100000000);
                     int numDesMMS = 600000000 + random.nextInt(100000000);
                     String nombreRemMMS = nombres[random.nextInt(nombres.length)];
                     String nombreDesMMS = nombres[random.nextInt(nombres.length)];
-                    String imagen = imagenes[random.nextInt(imagenes.length)];
-                    
+                    String imagen = imagenes[random.nextInt(imagenes.length)];     
                     MensajeImagen mms = new MensajeImagen(imagen, numRemMMS, numDesMMS, nombreRemMMS, nombreDesMMS);
                     listaMensajes.add(mms);
+                    miMovil.agregarMensaje(mms);
                     System.out.println("\nMensaje con imagen enviado: " + mms);
                     break;
                     
                 case '3':
                     System.out.println("\n--- Lista de Mensajes ---");
-                    for(Mensaje m : listaMensajes) {
-                        System.out.println(m);
-                    }
+                    System.out.println(miMovil);
                     break;
                     
                 case '4':
@@ -134,4 +131,21 @@ class MensajeImagen extends Mensaje {
     
     
     
+}
+
+class Movil {
+    private ArrayList<Mensaje> mensajes = new ArrayList<Mensaje>();
+
+    public Movil() {}
+
+    public void agregarMensaje(Mensaje m) {
+        mensajes.add(m);
+    }
+
+    @Override
+    public String toString() {
+        return "Movil{" + "mensajes=" + mensajes + '}';
+    }
+
+
 }

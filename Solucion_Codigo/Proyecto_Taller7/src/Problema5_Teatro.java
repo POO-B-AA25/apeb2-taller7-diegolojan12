@@ -149,7 +149,7 @@ class Zona {
     
 }
 
-abstract class Entrada {
+class Entrada {
     public int id;
     public String comprador;
     public Zona zona;
